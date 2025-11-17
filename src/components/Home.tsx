@@ -40,7 +40,8 @@ const Home = () => {
             {/*****************************
              *products you may like
              */}
-            <MySection products={ProductsCollection1} LinkTo="products-you-may-like" mainTitle="Products You May Like" subTitle="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum fuga eius a quibusdam saepe aliquam soluta neque hic obcaecati sit?"/>
+            <MySection products={ProductsCollection1} LinkTo="products-you-may-like" mainTitle="Products You May Like" 
+            subTitle="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum fuga eius a quibusdam saepe aliquam soluta neque hic obcaecati sit?"/>
             {/***************************
              *instagram
              */}

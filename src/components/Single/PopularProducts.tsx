@@ -11,7 +11,7 @@ const Section=styled('section')(()=>({
 }))
 
 const PopularProducts = () => {
-    const [value, setValue] = useState('sofa')
+    const [value, setValue] = useState('livingroom')
     
         const handleChange = (event: React.SyntheticEvent, newValue:string)=>{
             setValue(newValue)
@@ -27,34 +27,34 @@ const PopularProducts = () => {
                     <TabContext value={value}>
                         <Box sx={{borderBottom:1, borderBottomColor:'divider', marginBottom:2}}>
                             <TabList onChange={handleChange} aria-label="Popular items" centered sx={{color:'#FD8F5F'}}>
-                                <Tab label="Sofa" value='sofa'/>
-                                <Tab label="chair" value='chair'/>
-                                <Tab label="Bed" value={'bed'}/>
-                                <Tab label="Lightning" value={'lightning'}/>
-                                <Tab label="Decore" value={'decore'}/>
+                                <Tab label="Living Room" value='livingroom'/>
+                                <Tab label="Bed Room" value='bedroom'/>
+                                <Tab label="Dining Room" value={'diningroom'}/>
+                                <Tab label="Wardrobe" value={'wardrobe'}/>
+                                <Tab label="Study" value={'study'}/>
                             </TabList>
                         </Box>
-                        <TabPanel value={'sofa'}>
+                        <TabPanel value={'livingroom'}>
                             <Grid container spacing={4}>
                                 <ProductDetails products={ProductsCollection1}/>
                             </Grid>
                         </TabPanel>
-                        <TabPanel value={'chair'}>
+                        <TabPanel value={'bedroom'}>
                             <Grid container spacing={4}>
                                 <ProductDetails products={ProductsCollection2}/>
                             </Grid>
                         </TabPanel>
-                        <TabPanel value={'bed'}>
+                        <TabPanel value={'diningroom'}>
                             <Grid container spacing={4}>
                                 <ProductDetails products={ProductsCollection1}/>
                             </Grid>
                         </TabPanel>
-                        <TabPanel value={'lightning'}>
+                        <TabPanel value={'wardrobe'}>
                             <Grid container spacing={4}>
                                 <ProductDetails products={ProductsCollection2}/>
                             </Grid>
                         </TabPanel>
-                        <TabPanel value={'decore'}>
+                        <TabPanel value={'study'}>
                             <Grid container spacing={4}>
                                 <ProductDetails products={ProductsCollection1}/>
                             </Grid>
