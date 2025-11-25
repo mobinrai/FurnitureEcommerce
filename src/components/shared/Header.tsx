@@ -40,7 +40,7 @@ const Header = () => {
             <MyNavLinkWrapper>
                 <MyMainNavLink linkName='Home' linkTo='/' paddingValue='39px 19px'/>
                 <MyMainNavLink linkName='All Categories' linkTo='/all-categories'  paddingValue='39px 19px'/>
-                <MyMainNavLink linkName='Product' linkTo='/product'  paddingValue='39px 19px'/>
+                <MyMainNavLink linkName='Product' linkTo='/products'  paddingValue='39px 19px'/>
                 <MyMainNavLink linkName='About' linkTo='/about-us'  paddingValue='39px 19px'/>
                 <MyMainNavLink linkName='Blog' linkTo='/blogs'  paddingValue='39px 19px'/>
                 <MyMainNavLink linkName='Contact' linkTo='/contact'  paddingValue='39px 19px'/>

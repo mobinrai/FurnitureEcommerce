@@ -1,9 +1,4 @@
-import { Box, Button, Container, Grid, LinearProgress, Rating, Stack, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@mui/material"
-import Avatar1 from '../../assets/images/users/avatar-1.webp'
-import Avatar2 from '../../assets/images/users/avatar-2.webp'
-import Avatar3 from '../../assets/images/users/avatar-3.webp'
-import Avatar4 from '../../assets/images/users/avatar-4.webp'
-import Avatar5 from '../../assets/images/users/avatar-5.webp'
+import { Box, Button, Container, Grid, Rating, Stack, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@mui/material"
 import PopularImg5 from '../../assets/images/popular5.png.webp'
 import PopularImg6 from '../../assets/images/popular6.png.webp'
 import PopularImg7 from '../../assets/images/popular7.png.webp'
@@ -11,60 +6,17 @@ import { Add, ArrowRight, Close, Create, Email, Favorite, Minimize, Share } from
 import React, { useEffect, useState } from "react"
 import ShadowButton from "../Single/ShadowButton"
 import ProductReviews from "../Single/ProductReviews"
-import ProductDetails from "../Single/ProductDetails"
-import { ProductsCollection1, ProductsCollection2,DeskImages } from "../shared/Data"
+import { DeskImages } from "../shared/Data"
 import MyBreadcrumb from "../shared/MyBreadcrumb"
-import { useParams } from "react-router"
-import ErrorPage from "../errors/ErrorPage"
+import MySingleRating from "../shared/MySingleRating"
+import type { ProductDetails, ReviewDetails } from "../../types/MyTypes"
+import MyProductDetails from "../Single/MyProductDetails"
 
-
-const reviewsCollection = [
-    {
-        userName: 'Penelopi',
-        image:Avatar1,
-        date:'11 Nov 2025',
-        text:'Great product! Highly recommended.',
-        rating:4.5,
-    },
-    {
-        userName: 'Penelopi',
-        image:Avatar2,
-        date:'09 Nov 2025',
-        text:'Good quality and fast delivery.',
-        rating:4
-    },{
-        userName: 'Snow White',
-        image:Avatar3,
-        date:'11 Dec 2024',
-        text:'Looks greate but not as expected.',
-        rating:2.5,
-    },
-    {
-        userName: 'Aurora',
-        image:Avatar5,
-        date:'29 Feb 2023',
-        text:'Bad quality and delivery is not on Time.',
-        rating:1
-    }
-    ,{
-        userName: 'Merinda',
-        image:Avatar1,
-        date:'11 Apr 2022',
-        text:'The sun slowly set over the horizon, painting the sky in vibrant hues of orange and pink.',
-        rating:1.5,
-    },
-    {
-        userName: 'Penelopi',
-        image:Avatar4,
-        date:'29 May 2021',
-        text:'Bad quality and delivery is not on Time.',
-        rating:1
-    }
-]
 
 const SingleProduct = () => {
-    const { name } = useParams<{ name: string }>();
     const [quantity, setQuantity] = useState(1)
+    const [reviews, setReviews] = useState<ReviewDetails>([])
+    const [products, setProducts] = useState<ProductDetails>([])
     const [currentImage, setCurrentImage] = useState(DeskImages[0])
     const [isProdctDetailShown, setIsProductDetailShown] = useState(false)
     
@@ -78,9 +30,15 @@ const SingleProduct = () => {
             document.body.style.overflow=''
         }
     },[isProdctDetailShown])
-
-    if(!name) return <ErrorPage/>
-
+    useEffect(()=>{
+        (async ()=>{
+            const urls = ['http://localhost:3001/reviews','http://localhost:3001/products?_limit=4' ]
+            const responses = await Promise.all(urls.map(url=>fetch(url)))
+            const [reviews, products] = await Promise.all(responses.map(res=>res.json()))
+            setReviews(reviews)
+            setProducts(products)
+        })()
+    },[])
     const handleChange= (event:React.ChangeEvent<HTMLInputElement>)=>
     {
         const currentValue =parseInt(event.target.value)
@@ -108,10 +66,11 @@ const SingleProduct = () => {
             setQuantity(prev=>prev+1)
         }
     }
+    console.log(reviews);
     return (
         <section style={{margin:'100px 0'}}>
             <Container>
-                <MyBreadcrumb items={[{label:'Products', href:'/products'},{label:name}]}/>    
+                <MyBreadcrumb items={[{label:'Products', href:'/products'}]}/>    
                 <Grid container rowSpacing={1} spacing={1}>
                     <Grid size={{lg: 8}} sx={{ position: 'sticky', height:'fit-content', top:5, alignSelf: 'flex-start',transition: 'all 0.3s ease'}}>
                         <Box position={'static'} zIndex={999}>
@@ -140,14 +99,21 @@ const SingleProduct = () => {
                             </Stack>
                             <Typography variant="body1" sx={{color:'#FD8F5F', fontWeight:'bold', fontSize:26}}>$456</Typography>
                             <Stack sx={{borderBottom:'1px dotted gray'}} gap={1}  pb={1}>
-                                <Stack direction={'row'} gap={1}><span>Category : </span> <span style={{color:'#FD8F5F'}}>HouseHold</span></Stack>
-                                <Stack direction={'row'} gap={1}><span>Availability : </span><span>In Stock</span></Stack>
+                                <Stack direction={'row'} gap={1}>
+                                    <Typography variant="caption">Category : </Typography>
+                                    <Typography  variant="caption" style={{color:'#FD8F5F'}}>HouseHold</Typography>
+                                </Stack>
+                                <Stack direction={'row'} gap={1}>
+                                    <Typography  variant="caption">Availability : </Typography>
+                                    <Typography  variant="caption">In Stock</Typography>
+                                </Stack>
                             </Stack>
                             <Typography variant="body1" sx={{color:'#646D77'}}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi pariatur iste iusto dicta molestias blanditiis deserunt nobis ex, doloribus adipisci!</Typography>
                             <Box sx={{position:'relative', display:'flex', alignItems:'center'}}>
-                                <span style={{position:'absolute',top:'8px', left:'10px', zIndex:999,cursor:'pointer',bottom:'-10px'}} onClick={handleSubtract}><Minimize/></span>
+                                <Typography  variant="caption" style={{position:'absolute',top:'8px', left:'10px', zIndex:999,cursor:'pointer',bottom:'-10px'}} onClick={handleSubtract}>
+                                    <Minimize/></Typography>
                                 <TextField variant="outlined" value={quantity} onChange={handleChange}  slotProps={{input:{sx:{borderRadius: '50px',position:'relative',backgroundColor:'#ecececff',color:'black',width:'60%',paddingLeft:'25px'}}}}/>
-                                <span style={{position:'relative', right:'130px', top:'4px',zIndex:999,cursor:'pointer'}} onClick={handleAdd}><Add/></span>
+                                <Typography  variant="caption" style={{position:'relative', right:'130px', top:'4px',zIndex:999,cursor:'pointer'}} onClick={handleAdd}><Add/></Typography>
                             </Box>
                             <Stack direction={'row'} gap={4}>
                                 <ShadowButton displayText='Add to Cart'/>
@@ -169,7 +135,7 @@ const SingleProduct = () => {
                                 <Stack direction={'row'} gap={2}>
                                     <Box width={'40%'}><img src={PopularImg5} width={'100%'}/></Box>
                                     <Stack>
-                                        <Typography>DESK CURTAIN 55.4/21.5/8 cm in white, birch color</Typography>
+                                        <Typography variant="caption">DESK CURTAIN 55.4/21.5/8 cm in white, birch color</Typography>
                                         <Typography variant="caption" mt={1} fontWeight={700}>$ 25.8</Typography>
                                     </Stack>
                                 </Stack>
@@ -179,7 +145,7 @@ const SingleProduct = () => {
                                 <Stack direction={'row'} gap={2}>
                                     <Box width={'40%'}><img src={PopularImg6} width={'100%'}/></Box>
                                     <Stack>
-                                        <Typography>DESK CURTAIN 55.4/21.5/8 cm in white, birch color</Typography>
+                                        <Typography  variant="caption">DESK CURTAIN 55.4/21.5/8 cm in white, birch color</Typography>
                                         <Typography variant="caption" mt={1} fontWeight={700}>$ 25.8</Typography>
                                     </Stack>
                                 </Stack>
@@ -189,7 +155,7 @@ const SingleProduct = () => {
                                 <Stack direction={'row'} gap={2}>
                                     <Box width={'40%'}><img src={PopularImg7} width={'100%'}/></Box>
                                     <Stack>
-                                        <Typography>DESK CURTAIN 55.4/21.5/8 cm in white, birch color</Typography>
+                                        <Typography  variant="caption">DESK CURTAIN 55.4/21.5/8 cm in white, birch color</Typography>
                                         <Typography variant="caption" mt={1} fontWeight={700}>$ 25.8</Typography>
                                     </Stack>
                                 </Stack>
@@ -305,36 +271,11 @@ const SingleProduct = () => {
                                 <Typography variant="body2" color="#afafafff" my={2}>(9.12k reviews)</Typography>
                             </Stack>
                             <Stack>
-                                <Stack direction={'row'} alignItems={'center'} gap={2}>
-                                    <Typography variant="h6">5 star</Typography>
-                                    <LinearProgress variant="determinate" 
-                                    sx={{backgroundColor:'#b1b1b1ff','& .MuiLinearProgress-bar':{backgroundColor:'#272727ff'}, width:'55%'}} value={50}/>
-                                    <span style={{color:"#818182ff"}}>2.08k</span>
-                                </Stack>
-                                <Stack direction={'row'} alignItems={'center'} gap={2}>
-                                    <Typography variant="h6">4 star</Typography>
-                                    <LinearProgress variant="determinate" 
-                                    sx={{backgroundColor:'#b1b1b1ff','& .MuiLinearProgress-bar':{backgroundColor:'#272727ff'}, width:'55%'}} value={25}/>
-                                    <span style={{color:"#818182ff"}}>6.08k</span>
-                                </Stack>
-                                <Stack direction={'row'} alignItems={'center'} gap={2}>
-                                    <Typography variant="h6">3 star</Typography>
-                                    <LinearProgress variant="determinate" 
-                                    sx={{backgroundColor:'#b1b1b1ff','& .MuiLinearProgress-bar':{backgroundColor:'#272727ff'}, width:'55%'}} value={8}/>
-                                    <span style={{color:"#818182ff"}}>3.80k</span>
-                                </Stack>
-                                <Stack direction={'row'} alignItems={'center'} gap={2}>
-                                    <Typography variant="h6">2 star</Typography>
-                                    <LinearProgress variant="determinate" 
-                                    sx={{backgroundColor:'#b1b1b1ff','& .MuiLinearProgress-bar':{backgroundColor:'#272727ff'}, width:'55%'}} value={10}/>
-                                    <span style={{color:"#818182ff"}}>9.08k</span>
-                                </Stack>
-                                <Stack direction={'row'} alignItems={'center'} gap={2}>
-                                    <Typography variant="h6">1 star</Typography>
-                                    <LinearProgress variant="determinate" 
-                                    sx={{backgroundColor:'#b1b1b1ff','& .MuiLinearProgress-bar':{backgroundColor:'#272727ff'}, width:'55%'}} value={30}/>
-                                    <span style={{color:"#818182ff"}}>1.08k</span>
-                                </Stack>
+                                <MySingleRating starNumber={5} progressValue={50} totalNumber={6.08}/>
+                                <MySingleRating starNumber={4} progressValue={25} totalNumber={2.08}/>
+                                <MySingleRating starNumber={3} progressValue={8} totalNumber={3.08}/>
+                                <MySingleRating starNumber={2} progressValue={10} totalNumber={16.08}/>
+                                <MySingleRating starNumber={1} progressValue={35} totalNumber={20.08}/>
                             </Stack>
                             <Button variant="outlined" sx={{backgroundColor:'#C4CDD5', borderColor:'#C4CDD5', color:'black', fontWeight:'bold', ':hover':{
                                 backgroundColor:'black', color:'white', boxShadow:2,transition:'all 0.3s ease-in-out',
@@ -344,29 +285,33 @@ const SingleProduct = () => {
                             </Stack>
                         </Grid>
                         <Grid size={{lg:8}} borderLeft={{xs:'0', sm:'1px dotted gray'}}>
-                            <ProductReviews reviews={reviewsCollection}/>
+                            <ProductReviews reviews={reviews}/>
                         </Grid>
                     </Grid>
                     
                 </Stack>
                 <Stack my={8}>
-                    <Box borderBottom={1} mb={4} borderColor={'divider'}><Typography variant="h6">Products You May Like</Typography></Box>
+                    <Box borderBottom={1} mb={4} borderColor={'divider'}>
+                        <Typography variant="h6" fontWeight={700}>Products You May Like</Typography>
+                    </Box>
                     <Grid container spacing={4}>
-                        <ProductDetails products={ProductsCollection1}/>
+                        <MyProductDetails  products={products}/>
                     </Grid>
                 </Stack>
                 <Stack my={8}>
                     <Box borderBottom={1} mb={4} borderColor={'divider'}>
-                        <Typography variant="h6">Products From Your Search</Typography>
+                        <Typography variant="h6" fontWeight={700}>Products From Your Search</Typography>
                     </Box>
                     <Grid container spacing={4}>
-                        <ProductDetails products={ProductsCollection2}/>
+                        <MyProductDetails products={products}/>
                     </Grid>
                 </Stack>
                 <Stack my={8}>
-                    <Box borderBottom={1} mb={4} borderColor={'divider'}><Typography variant="h6">Others also bought</Typography></Box>
+                    <Box borderBottom={1} mb={4} borderColor={'divider'}>
+                        <Typography variant="h6" fontWeight={700}>Others also bought</Typography>
+                    </Box>
                     <Grid container spacing={4}>
-                        <ProductDetails products={ProductsCollection1}/>
+                        <MyProductDetails products={products}/>
                     </Grid>
                 </Stack>
             </Container>

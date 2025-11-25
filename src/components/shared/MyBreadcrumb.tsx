@@ -1,4 +1,4 @@
-// import { Home } from '@mui/icons-material'
+import { HomeOutlined } from '@mui/icons-material'
 import { Breadcrumbs, Link, Typography } from '@mui/material'
 
 type BreadcrumbProps = {
@@ -10,8 +10,8 @@ type BreadcrumbProps = {
 const MyBreadcrumb = ({items}:BreadcrumbProps) => {
     return (
         <Breadcrumbs separator=">" aria-label="breadcrumb">
-            <Link href="/">
-                <Typography variant='caption'>Home</Typography>
+            <Link href="/" sx={{alignItems:'center', display:'flex'}}>
+                <HomeOutlined fontSize='small'/>
             </Link>
             {items.map((item,index)=>{
                 const lastItem = index === items.length-1

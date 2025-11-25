@@ -1,13 +1,13 @@
 import { Box, Button, Grid,styled, Stack, Typography} from "@mui/material"
-import VisitBg from '../assets/images/visit_bg.png.webp'
+import VisitBg from '@images/visit_bg.png.webp'
 import {Instagram} from "@mui/icons-material"
-import Instagram1 from '../assets/images/instra1.png.webp'
-import Instagram2 from '../assets/images/instra2.png.webp'
+import Instagram1 from '@images/instra1.png.webp'
+import Instagram2 from '@images/instra2.png.webp'
 import PopularProducts from "./Single/PopularProducts"
 import SectionTitle from "./Single/SectionTitle"
 import ShadowButton from "./Single/ShadowButton"
 import MySection from "./Single/MySection"
-import { ProductsCollection1, ProductsCollection2 } from "./shared/Data"
+import { ProductList2, ProductsCollection1 } from "./shared/Data"
 
 const Img=styled('img')(({theme})=>({
     [theme.breakpoints.down('sm')]: {
@@ -65,7 +65,7 @@ const Home = () => {
            {/******************************
             * top section
             */}
-            <MySection products={ProductsCollection2}  LinkTo="top-section" mainTitle="Top Section" subTitle="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum fuga eius a quibusdam saepe aliquam soluta neque hic obcaecati sit?"/>
+            <MySection products={ProductList2}  LinkTo="top-section" mainTitle="Top Section" subTitle="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum fuga eius a quibusdam saepe aliquam soluta neque hic obcaecati sit?"/>
             {/*****************************
             * serives section
             */}
